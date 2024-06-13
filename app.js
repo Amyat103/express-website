@@ -3,11 +3,25 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
+
+// Setup mongoose connection
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
+//get key for .env
+const mongoPass = process.env.MONGO_PASS;
+console.log(mongoPass);
+const mongoDB = `mongodb+srv://zhoudavid7312:${mongoPass}@cluster0.ydzqsoi.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0`;
+
+main().catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect(mongoDB);
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
